@@ -165,4 +165,4 @@ The Python script and its entire virtual environment are bundled inside `PriceRe
 
 ## License
 
-MIT
+[CC0 1.0 Universal](LICENSE) — Public Domain. Do whatever you want with it.
