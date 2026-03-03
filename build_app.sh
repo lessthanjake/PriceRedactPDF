@@ -57,10 +57,16 @@ on open theFiles
     set filePathsString to filePaths as text
     set AppleScript's text item delimiters to oldDelims
 
+    -- Count files for progress message
+    set fileCount to count of theFiles
+    display notification "Redacting prices from " & fileCount & " item(s)... this may take a minute." with title "PriceRedactPDF"
+
     try
-        set cmd to quoted form of pythonBin & " " & quoted form of pythonScript & " " & filePathsString
+        -- Set up environment: Homebrew PATH, locale, and TMPDIR (required by tesseract)
+        set shellPrefix to "export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH; export LANG=en_US.UTF-8; export TMPDIR=$(getconf DARWIN_USER_TEMP_DIR); "
+        set cmd to shellPrefix & quoted form of pythonBin & " " & quoted form of pythonScript & " " & filePathsString
         set output to do shell script cmd
-        display notification output with title "PriceRedactPDF"
+        display dialog output buttons {"OK"} default button 1 with title "PriceRedactPDF"
     on error errMsg
         display dialog "Error redacting prices:" & return & return & errMsg buttons {"OK"} default button 1 with icon stop
     end try
